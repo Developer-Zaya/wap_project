@@ -52,11 +52,6 @@ function renderCart(products) {
     let tbody = document.createElement('tbody');
   
     products.forEach(product => {
-      let existingRow = tbody.querySelector(`tr[data-product-id="${product.id}"]`);
-      if (existingRow) {
-        let quantityTd = existingRow.querySelector('.quantity');
-        quantityTd.textContent = product.quantity;
-      } else {
         let tr = document.createElement('tr');
         tr.setAttribute('data-product-id', product.id);
   
@@ -69,7 +64,7 @@ function renderCart(products) {
         tr.appendChild(priceTd);
   
         let total = document.createElement('td');
-        total.textContent = product.total;
+        total.textContent = product.product.price *product.quantity ;
         tr.appendChild(total);
   
         let quantity = document.createElement('td');
@@ -78,7 +73,6 @@ function renderCart(products) {
         tr.appendChild(quantity);
   
         tbody.appendChild(tr);
-      }
     });
   
     table.appendChild(tbody);
