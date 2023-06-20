@@ -1,12 +1,11 @@
-let products = [];
+class Product {
 
-module.exports = class Product {
-
-    constructor(id, title, price, description) {
+    constructor(id, title, price, img,stack) {
         this.id = id;
         this.title = title;
         this.price = price;
-        this.description = description;
+        this.img = img;
+        this.stack = stack;
     }
 
     save() {
@@ -49,3 +48,7 @@ module.exports = class Product {
     }
 
 }
+
+const products = [new Product(1, "React", 9.99, "react.png",8),new Product(2, "Nodejs", 19.99, "node.png",2),new Product(3, "Angular", 29.99, "angular.png",8)];
+
+module.exports = Product;

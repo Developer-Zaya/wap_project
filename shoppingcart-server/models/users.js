@@ -1,6 +1,4 @@
-let users = [{username:'1',password:'123'}];
-
-module.exports = class Users {
+class User {
     constructor(username, password) {
         this.username = username;
         this.password = password;
@@ -11,8 +9,20 @@ module.exports = class Users {
         users.push(newUser);
     }
 
-    static auth(username, password) {
+    static login(username, password) {
         const user = users.find(user => user.username === username && user.password === password);
-        return user ? true : false;
+        return user;
+    }
+
+    getToken(){
+        return this.username + ","+Date.now();
+    }
+    static auth(token){
+        const tokenArray = token.split(",");
+        
+        const user = users.find(user => user.username === tokenArray[0]);
+        return user;
     }
 };
+const users = [new User('1','123')];
+module.exports = User
