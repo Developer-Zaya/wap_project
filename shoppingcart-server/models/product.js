@@ -30,7 +30,7 @@ class Product {
     }
 
     static findById(productId) {
-        const index = products.findIndex(p => p.id === productId);
+        const index = products.findIndex(p => p.id == productId);
         if (index > -1) {
             return products[index];
         } else {
