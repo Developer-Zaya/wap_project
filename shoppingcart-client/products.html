@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link href="./resources/bootstrap.min.css" rel="stylesheet">
+    <link href="./resources/carousel.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./resources/cart.js"></script>
+    <style>
+        .logo-img {
+            max-width: 50px;
+            height: auto;
+            margin-left: 3%;
+        }
+
+        .myrow {
+            width: 400px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .btn {
+            background-color: light-green;
+            padding: 12px 16px;
+            font-size: 16px;
+        }
+ 
+        .btn:hover {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+                <img src="./images/logo.png" alt="MIU logo" class="logo-img">
+                <div class="row">
+                    <div>
+                        <p class="fw-normal text-light d-inline p-2">Welcome, </p>
+                        <p class="fw-normal text-light fw-bold d-inline p-2 text-decoration-underline">Ariunzaya</p>
+                        <button class="btn btn-outline-success fw-bold d-inline p-2 ms-5" type="submit"
+                            id="login-btn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container marketing">
+            <hr class="featurette-divider">
+
+            <div class="row featurette">
+                <div class="col-md-12">
+                    <h4 class="mb-3">Product list</h4>
+                    <div id="product-table">
+                    </div>
+                    <h4 class="mb-3">Your shopping cart</h4>
+                    <h4 class="mb-3">There is no item in your shopping cart !</h4>
+                    <div id="my-cart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

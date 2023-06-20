@@ -21,6 +21,7 @@ async function login(){
         res = await result.json()
         alert(res.message);
     }else{
-        
+        session = result;
+        window.location.href = 'products.html';
     }
 }
