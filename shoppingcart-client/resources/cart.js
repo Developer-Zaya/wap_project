@@ -1,4 +1,5 @@
 window.onload = function () {
+    console.log(sessionStorage.getItem("data"))
     getProducts();
     document.getElementById('product-table').addEventListener('click', function (event) {
         event.preventDefault();
@@ -6,6 +7,9 @@ window.onload = function () {
         if (target.matches('.btn')) {
             login();
         }
+    });
+    document.getElementById('logout-btn').addEventListener('click', function (event) {
+        window.location.href = 'index.html';
     });
 }
 

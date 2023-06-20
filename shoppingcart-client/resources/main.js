@@ -22,6 +22,7 @@ async function login(){
         alert(res.message);
     }else{
         session = result;
+        sessionStorage.setItem("data","token")
         window.location.href = 'products.html';
     }
 }
