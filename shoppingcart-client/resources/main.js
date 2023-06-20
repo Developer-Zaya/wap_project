@@ -2,7 +2,6 @@ window.onload = function() {
     document.getElementById('login-btn').onclick = function(event) {
         event.preventDefault();
         login();
-        console.log("login")
     }
 }
 
@@ -16,13 +15,12 @@ async function login(){
             username: document.getElementById('username').value,
             password: document.getElementById('password').value
         })
-    });
-    if (result.status == 401){
-        res = await result.json()
-        alert(res.message);
+    }).then(res => res.json());
+    if (result.status >= 400){
+        alert(result.message);
     }else{
         session = result;
-        sessionStorage.setItem("data","token")
+        sessionStorage.setItem("data",result.token)
         window.location.href = 'products.html';
     }
 }

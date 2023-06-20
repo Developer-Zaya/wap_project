@@ -4,11 +4,12 @@ const middleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-middleware(router);
 
 router.get('/', productController.getProducts);
 
 router.get('/:prodId', productController.getProductById);
+
+middleware(router);
 
 router.post('/', productController.save);
 

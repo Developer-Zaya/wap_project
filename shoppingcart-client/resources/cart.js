@@ -1,6 +1,7 @@
 window.onload = function () {
-    console.log(sessionStorage.getItem("data"))
     getProducts();
+    const token = sessionStorage.getItem("data")
+
     document.getElementById('product-table').addEventListener('click', function (event) {
         event.preventDefault();
         const target = event.target;
@@ -8,12 +9,16 @@ window.onload = function () {
             login();
         }
     });
+
+    document.getElementById('login-user').innerText=token.split(",")[0];
+
     document.getElementById('logout-btn').addEventListener('click', function (event) {
         window.location.href = 'index.html';
     });
 }
 
 async function getProducts() {
+    const token = sessionStorage.getItem("data")
     let products = await fetch('http://localhost:3000/products/').then(response => response.json());
     renderProduct(products)
 }

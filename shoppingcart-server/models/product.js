@@ -2,10 +2,10 @@ class Product {
 
     constructor(id, title, price, img,stack) {
         this.id = id;
-        this.title = title;
+        this.name = title;
         this.price = price;
-        this.img = img;
-        this.stack = stack;
+        this.image = img;
+        this.stock = stack;
     }
 
     save() {
