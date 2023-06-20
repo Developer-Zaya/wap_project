@@ -7,7 +7,7 @@
         "start": "nodemon app.js"
     },
     "keywords": [],
-    "author": "Rujuan Xing",
+    "author": "Ariunzaya Munkhbat",
     "license": "ISC",
     "dependencies": {
         "cors": "^2.8.5",
