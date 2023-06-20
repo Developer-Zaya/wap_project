@@ -32,46 +32,60 @@ async function addToCart(id){
         return res.json();
       })
       console.log(result)
+    renderCart(result) //array contoining product object and its quantity
 }
 
-function renderCart(prod){
+function renderCart(products) {
     let table = document.createElement('table');
     table.classList.add('table', 'table-bordered');
     let thead = document.createElement('thead');
     let tr = document.createElement('tr');
     let headers = ['Name', 'Price', 'Total', 'Quantity'];
     headers.forEach(headerText => {
-        let th = document.createElement('th');
-        th.classList.add('text-center');
-        th.textContent = headerText;
-        tr.appendChild(th);
+      let th = document.createElement('th');
+      th.classList.add('text-center');
+      th.textContent = headerText;
+      tr.appendChild(th);
     });
     thead.appendChild(tr);
     table.appendChild(thead);
     let tbody = document.createElement('tbody');
-
-    prod.forEach(product => {
+  
+    products.forEach(product => {
+      let existingRow = tbody.querySelector(`tr[data-product-id="${product.id}"]`);
+      if (existingRow) {
+        let quantityTd = existingRow.querySelector('.quantity');
+        quantityTd.textContent = product.quantity;
+      } else {
         let tr = document.createElement('tr');
-
+        tr.setAttribute('data-product-id', product.id);
+  
         let nameTd = document.createElement('td');
-        nameTd.textContent = product.name;
+        nameTd.textContent = product.product.name;
         tr.appendChild(nameTd);
-
+  
         let priceTd = document.createElement('td');
-        priceTd.textContent = product.price;
+        priceTd.textContent = product.product.price;
         tr.appendChild(priceTd);
-
+  
         let total = document.createElement('td');
         total.textContent = product.total;
         tr.appendChild(total);
-
+  
+        let quantity = document.createElement('td');
+        quantity.classList.add('quantity');
+        quantity.textContent = product.quantity;
+        tr.appendChild(quantity);
+  
         tbody.appendChild(tr);
+      }
     });
-
+  
     table.appendChild(tbody);
     let container = document.getElementById('my-cart');
+    container.innerHTML = ''; // Clear existing content
     container.appendChild(table);
-}
+  }
 
 function renderProduct(prod) {
     let table = document.createElement('table');
