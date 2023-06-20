@@ -9,7 +9,6 @@ window.onload = function () {
 }
 
 async function getProducts() {
-    const token = sessionStorage.getItem("data")
     let products = await fetch('http://localhost:3000/products/').then(response => response.json());
     renderProduct(products)
 }
@@ -17,8 +16,22 @@ async function getProducts() {
 let cart = []
 
 async function addToCart(id){
-    let product = await fetch('http://localhost:3000/products/'+id).then(response => response.json());
-    console.log(product);
+    const token = sessionStorage.getItem("data")
+    const tokenValue = token.split(",")[1];
+    let result = await fetch('http://localhost:3000/cart/', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `${token}`
+        },
+        body: JSON.stringify({
+            user: token.split(",")[0],
+            product: id
+        })
+    }).then(res => {
+        return res.json();
+      })
+      console.log(result)
 }
 
 function renderCart(prod){
