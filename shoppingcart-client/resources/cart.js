@@ -9,7 +9,6 @@ window.onload = function () {
 }
 
 async function getProducts() {
-    const token = sessionStorage.getItem("data")
     let products = await fetch('http://localhost:3000/products/').then(response => response.json());
     renderProduct(products)
 }
@@ -17,48 +16,70 @@ async function getProducts() {
 let cart = []
 
 async function addToCart(id){
-    let product = await fetch('http://localhost:3000/products/'+id).then(response => response.json());
-    console.log(product);
+    const token = sessionStorage.getItem("data")
+    const tokenValue = token.split(",")[1];
+    let result = await fetch('http://localhost:3000/cart/', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `${token}`
+        },
+        body: JSON.stringify({
+            user: token.split(",")[0],
+            product: id
+        })
+    }).then(res => {
+        return res.json();
+      })
+      console.log(result)
+    renderCart(result) //array contoining product object and its quantity
 }
 
-function renderCart(prod){
+function renderCart(products) {
     let table = document.createElement('table');
     table.classList.add('table', 'table-bordered');
     let thead = document.createElement('thead');
     let tr = document.createElement('tr');
     let headers = ['Name', 'Price', 'Total', 'Quantity'];
     headers.forEach(headerText => {
-        let th = document.createElement('th');
-        th.classList.add('text-center');
-        th.textContent = headerText;
-        tr.appendChild(th);
+      let th = document.createElement('th');
+      th.classList.add('text-center');
+      th.textContent = headerText;
+      tr.appendChild(th);
     });
     thead.appendChild(tr);
     table.appendChild(thead);
     let tbody = document.createElement('tbody');
-
-    prod.forEach(product => {
+  
+    products.forEach(product => {
         let tr = document.createElement('tr');
-
+        tr.setAttribute('data-product-id', product.id);
+  
         let nameTd = document.createElement('td');
-        nameTd.textContent = product.name;
+        nameTd.textContent = product.product.name;
         tr.appendChild(nameTd);
-
+  
         let priceTd = document.createElement('td');
-        priceTd.textContent = product.price;
+        priceTd.textContent = product.product.price;
         tr.appendChild(priceTd);
-
+  
         let total = document.createElement('td');
-        total.textContent = product.total;
+        total.textContent = product.product.price *product.quantity ;
         tr.appendChild(total);
-
+  
+        let quantity = document.createElement('td');
+        quantity.classList.add('quantity');
+        quantity.textContent = product.quantity;
+        tr.appendChild(quantity);
+  
         tbody.appendChild(tr);
     });
-
+  
     table.appendChild(tbody);
     let container = document.getElementById('my-cart');
+    container.innerHTML = ''; // Clear existing content
     container.appendChild(table);
-}
+  }
 
 function renderProduct(prod) {
     let table = document.createElement('table');

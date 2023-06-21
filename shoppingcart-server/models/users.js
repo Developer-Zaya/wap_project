@@ -1,7 +1,8 @@
 class User {
-    constructor(username, password) {
+    constructor(username, password,cart) {
         this.username = username;
         this.password = password;
+        this.cart = cart;
     }
 
     static addUser(username, password) {
