@@ -10,4 +10,6 @@ router.get("/",shoppingCartController.getShoppingCarts);
 
 router.post("/",shoppingCartController.addToCart);
 
+router.put("/",shoppingCartController.removeCart);
+
 module.exports= router;

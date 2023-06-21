@@ -15,3 +15,14 @@ exports.addToCart =(req,res)=>{
     const cart = ShoppingCart.addToShoppingCart(productid,user.username);
     res.status(200).json(cart);
 }
+exports.removeCart=(req,res)=>{
+    console.log(req.body)
+    const { productid } = req.body;
+    if(!productid){
+        res.status(403).json({error:"please include products"})
+    }
+    console.log(productid);
+    const user = User.auth(req.get("Authorization"));
+    const cart = ShoppingCart.removeFromShoppingCart(productid,user.username);
+    res.status(200).json(cart);
+}
