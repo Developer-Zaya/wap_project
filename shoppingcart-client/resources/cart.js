@@ -15,12 +15,31 @@ async function getProducts() {
 }
 
 async function getUserCart() {
-    // if user cart 
+    const token = sessionStorage.getItem("data")
+    let result = await fetch('http://localhost:3000/cart/', {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `${token}`
+        }
+    }).then(res => {
+        return res.json();
+    })
+    if(result.length > 0){
+        renderCart(result) 
+    }else{
+        let text = document.createElement('h4');
+        text.textContent = "There is no item in your shopping cart !"
+        text.classList.add('mb-3')
+        let container = document.getElementById('my-cart');
+        container.innerHTML = '';
+        container.appendChild(text);
+    }
+    
 }
 
 async function addToCart(id) {
     const token = sessionStorage.getItem("data")
-    const tokenValue = token.split(",")[1];
     let result = await fetch('http://localhost:3000/cart/', {
         method: 'POST',
         headers: {
@@ -28,13 +47,27 @@ async function addToCart(id) {
             'Authorization': `${token}`
         },
         body: JSON.stringify({
-            user: token.split(",")[0],
-            product: id
+            productid: id
         })
     }).then(res => {
         return res.json();
     })
-    console.log(result)
+    renderCart(result) //array contoining product object and its quantity
+}
+async function removeProduct(id) {
+    const token = sessionStorage.getItem("data")
+    let result = await fetch('http://localhost:3000/cart/', {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `${token}`
+        },
+        body: JSON.stringify({
+            productid: id
+        })
+    }).then(res => {
+        return res.json();
+    })
     renderCart(result) //array contoining product object and its quantity
 }
 
@@ -60,33 +93,35 @@ function renderCart(products) {
         tr.setAttribute('data-product-id', product.id);
 
         let nameTd = document.createElement('td');
-        nameTd.textContent = product.product.name;
+        nameTd.textContent = product.name;
         tr.appendChild(nameTd);
 
         let priceTd = document.createElement('td');
-        priceTd.textContent = product.product.price;
+        priceTd.textContent = product.price;
         tr.appendChild(priceTd);
 
         let total = document.createElement('td');
-        total.textContent = (product.product.price * product.quantity).toFixed(2);
-        total_amount += product.product.price * product.quantity;
+        total.textContent = (product.price * product.quantity).toFixed(2);
+        total_amount += product.price * product.quantity;
         tr.appendChild(total);
 
         let quantity = document.createElement('td');
         quantity.classList.add("column");
         
         let quantityContainer = document.createElement('div');
-        quantityContainer.classList.add('d-flex', 'justify-content-center', 'align-items-center');
+        quantityContainer.classList.add('d-flex', 'justify-content-center', 'align-items-center', 'gap-2');
         
         let minus = document.createElement('button');
         minus.textContent = '-';
-        minus.classList.add('btn', 'btn-sm', 'btn-primary', 'p-0');
+        minus.classList.add('btn', 'fw-bold', 'text-uppercase', 'p-0','btn-light');
+        minus.onclick = () => { removeProduct(product.id) };
         let count = document.createElement('p');
         count.textContent = product.quantity;
         count.classList.add('m-0');
         let plus = document.createElement('button');
         plus.textContent = '+';
-        plus.classList.add('btn', 'btn-sm', 'btn-primary', 'p-0');
+        plus.classList.add('btn', 'fw-bold', 'text-uppercase', 'p-0','btn-light');
+        plus.onclick = () => { addToCart(product.id) };
         
         quantityContainer.appendChild(minus);
         quantityContainer.appendChild(count);
@@ -111,6 +146,22 @@ function renderCart(products) {
     let container = document.getElementById('my-cart');
     container.innerHTML = '';
     container.appendChild(table);
+    // let text = document.createElement('h4');
+    // text.textContent = "There is no item in your shopping cart !"
+    // text.classList.add('mb-3')
+    // let container = document.getElementById('my-cart');
+    // container.innerHTML = '';
+    // container.appendChild(text);
+    // <button class="btn btn-outline-success fw-bold d-inline p-2 ms-5" type="submit"
+    //                         id="logout-btn">Logout</button>
+    let submit_btn = document.createElement('button');
+    let submit_div = document.createElement('div');
+    submit_div.classList.add('d-grid', 'gap-2', 'd-md-flex', 'justify-content-md-end')
+    submit_btn.textContent = "Place order"
+    submit_btn.classList.add('btn' ,'btn-outline-success' ,'fw-bold' ,'d-inline','ms-auto')
+    submit_btn.onclick = () => { addToCart(product.id) };
+    submit_div.appendChild(submit_btn)
+    container.appendChild(submit_div)
 }
 
 function renderProduct(prod) {
