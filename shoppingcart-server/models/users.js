@@ -25,5 +25,5 @@ class User {
         return user;
     }
 };
-const users = [new User('1','123')];
+const users = [new User('1','123'),new User('2','123')];
 module.exports = User

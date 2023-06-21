@@ -14,8 +14,10 @@ class CartItem{
 class ShoppingCart {
     constructor(username,id,name,price,quantity){
         this.username = username;
-
-        this.items = [id && new CartItem(id,name,quantity,price,quantity*price)];
+        this.items = [];
+        if(id){
+            this.items.push(new CartItem(id,name,quantity,price,quantity*price));
+        }
     }
     static getShoppingCart(username){
         const cart = carts.find(cart => cart.username == username);
@@ -26,7 +28,7 @@ class ShoppingCart {
         console.log(productid);
         let product = Product.findById(productid);
         if(product.stock <= 0){
-            return [userCart ? userCart.items : [],];
+            return userCart ? userCart.items : [];
         }
         if(!userCart){
             userCart = new ShoppingCart(username,product.id,product.name,product.price,1);
@@ -35,7 +37,7 @@ class ShoppingCart {
         }
         let productIndex = userCart.items.findIndex(item => item.id == productid);
         if(productIndex > -1){
-            if(product.stock >= userCart.items[productIndex].quantity){
+            if(product.stock > userCart.items[productIndex].quantity){
                 userCart.items[productIndex].quantity++;
                 userCart.items[productIndex].total = userCart.items[productIndex].quantity * userCart.items[productIndex].price;
                 carts.splice(carts.findIndex(cart=>cart.username == userCart.username), 1, userCart);
@@ -66,5 +68,35 @@ class ShoppingCart {
         carts.splice(carts.findIndex(cart=>cart.username == userCart.username), 1, userCart);
         return userCart.items;
     }
+    static placeOrder(username){
+        let userCart = carts.find(cart => cart.username == username);
+        if(!userCart){
+            userCart = new ShoppingCart(username);
+            carts.push(userCart);
+        }
+        let result ={};
+        let products =[]
+        console.log(userCart.items)
+        userCart.items.map(item=>{
+            let product = Product.findById(item.id)
+            if(product.stock >= item.quantity){
+                product.stock -= item.quantity;
+                products.push(product);
+            }else{
+                result.error = "Out of stock"
+            }
+        })
+        if (!result.error){
+            userCart.items = [];
+            carts.splice(carts.findIndex(cart=>cart.username == userCart.username), 1, userCart);
+            products.forEach(product => product.update())
+
+        }
+        result.cart = userCart.items;
+        return result;
+    }
 }
+
+
+
 module.exports = ShoppingCart

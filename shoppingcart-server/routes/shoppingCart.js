@@ -12,4 +12,6 @@ router.post("/",shoppingCartController.addToCart);
 
 router.put("/",shoppingCartController.removeCart);
 
+router.post("/placeorder",shoppingCartController.placeOrder);
+
 module.exports= router;

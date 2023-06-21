@@ -26,3 +26,8 @@ exports.removeCart=(req,res)=>{
     const cart = ShoppingCart.removeFromShoppingCart(productid,user.username);
     res.status(200).json(cart);
 }
+exports.placeOrder = (req,res) =>{
+    const user = User.auth(req.get("Authorization"));
+    const result = ShoppingCart.placeOrder(user.username);
+    res.status(200).json(result);
+}
