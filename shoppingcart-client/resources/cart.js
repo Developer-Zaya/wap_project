@@ -14,6 +14,24 @@ async function getProducts() {
     renderProduct(products)
 }
 
+async function placeOrder(){
+    const token = sessionStorage.getItem("data")
+    await fetch('http://localhost:3000/cart/placeorder/', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `${token}`
+        }
+    })
+    getProducts();
+    let text = document.createElement('h4');
+    text.textContent = "There is no item in your shopping cart !"
+    text.classList.add('mb-3')
+    let container = document.getElementById('my-cart');
+    container.innerHTML = '';
+    container.appendChild(text);
+}
+
 async function getUserCart() {
     const token = sessionStorage.getItem("data")
     let result = await fetch('http://localhost:3000/cart/', {
@@ -52,7 +70,7 @@ async function addToCart(id) {
     }).then(res => {
         return res.json();
     })
-    renderCart(result) //array contoining product object and its quantity
+    renderCart(result)
 }
 async function removeProduct(id) {
     const token = sessionStorage.getItem("data")
@@ -68,7 +86,17 @@ async function removeProduct(id) {
     }).then(res => {
         return res.json();
     })
-    renderCart(result) //array contoining product object and its quantity
+
+    if(result.length > 0){
+        renderCart(result) 
+    }else{
+        let text = document.createElement('h4');
+        text.textContent = "There is no item in your shopping cart !"
+        text.classList.add('mb-3')
+        let container = document.getElementById('my-cart');
+        container.innerHTML = '';
+        container.appendChild(text);
+    }
 }
 
 function renderCart(products) {
@@ -127,7 +155,6 @@ function renderCart(products) {
         quantityContainer.appendChild(count);
         quantityContainer.appendChild(plus);
         quantity.appendChild(quantityContainer);
-        // quantity.textContent = product.quantity;
         tr.appendChild(quantity);
 
         tbody.appendChild(tr);
@@ -138,7 +165,7 @@ function renderCart(products) {
     total_line.colSpan = 4;
     total_line.textContent = "Total: " + total_amount.toFixed(2);
     total_line.style.textAlign = "right";
-    total_line.style.marginLeft = "300px"; // Set margin value with unit (e.g., pixels)
+    total_line.style.marginLeft = "300px";
     ttr.appendChild(total_line);
     tbody.appendChild(ttr);
 
@@ -146,20 +173,12 @@ function renderCart(products) {
     let container = document.getElementById('my-cart');
     container.innerHTML = '';
     container.appendChild(table);
-    // let text = document.createElement('h4');
-    // text.textContent = "There is no item in your shopping cart !"
-    // text.classList.add('mb-3')
-    // let container = document.getElementById('my-cart');
-    // container.innerHTML = '';
-    // container.appendChild(text);
-    // <button class="btn btn-outline-success fw-bold d-inline p-2 ms-5" type="submit"
-    //                         id="logout-btn">Logout</button>
     let submit_btn = document.createElement('button');
     let submit_div = document.createElement('div');
     submit_div.classList.add('d-grid', 'gap-2', 'd-md-flex', 'justify-content-md-end')
     submit_btn.textContent = "Place order"
     submit_btn.classList.add('btn' ,'btn-outline-success' ,'fw-bold' ,'d-inline','ms-auto')
-    submit_btn.onclick = () => { addToCart(product.id) };
+    submit_btn.onclick = () => { placeOrder() };
     submit_div.appendChild(submit_btn)
     container.appendChild(submit_div)
 }
@@ -221,5 +240,6 @@ function renderProduct(prod) {
 
     table.appendChild(tbody);
     let container = document.getElementById('product-table');
+    container.innerHTML = '';
     container.appendChild(table);
 }
