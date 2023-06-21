@@ -1,14 +1,17 @@
 const ShoppingCart = require("../models/shoppingCart");
 const User = require("../models/users");
 exports.getShoppingCarts =(req, res)=>{
-    res.status(200).json(ShoppingCart.getShoppingCart());
+    const user = User.auth(req.get("auth"));
+    res.status(200).json(ShoppingCart.getShoppingCart(user.username));
 }
 exports.addToCart =(req,res)=>{
-    const { product } = res.body;
-    if(!product){
+    console.log(req.body)
+    const { productid } = req.body;
+    if(!productid){
         res.status(403).json({error:"please include products"})
     }
+    console.log(productid);
     const user = User.auth(req.get("auth"));
-    const cart = ShoppingCart.addToShoppingCart(product,user.username);
+    const cart = ShoppingCart.addToShoppingCart(productid,user.username);
     res.status(200).json(cart);
 }

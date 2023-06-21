@@ -18,6 +18,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+    console.log(err.message);
     if (err.message === 'NOT Found') {
         res.status(404).json({ error: err.message ,status:404});
     } else {
