@@ -26,7 +26,7 @@ class ShoppingCart {
         console.log(productid);
         let product = Product.findById(productid);
         if(product.stock <= 0){
-            return userCart ? userCart.items : [];
+            return [userCart ? userCart.items : [],];
         }
         if(!userCart){
             userCart = new ShoppingCart(username,product.id,product.name,product.price,1);
@@ -46,6 +46,25 @@ class ShoppingCart {
         carts.splice(carts.findIndex(cart=>cart.username == userCart.username), 1, userCart);
         return userCart.items;
     }
-    static remo
+    static removeFromShoppingCart(productid,username){
+        let userCart = carts.find(cart => cart.username == username);
+        if(!userCart){
+            userCart = new ShoppingCart(username);
+            carts.push(userCart);
+        }
+        userCart.items=userCart.items.map(item =>{
+            if(item.id == productid){
+                if(item.quantity >1){
+                    item.quantity--;
+                    return item;
+                }
+            }else{
+                return item;
+            }
+        })
+        userCart.items = userCart.items.filter(item => item != null)
+        carts.splice(carts.findIndex(cart=>cart.username == userCart.username), 1, userCart);
+        return userCart.items;
+    }
 }
 module.exports = ShoppingCart
