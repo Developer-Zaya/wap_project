@@ -46,5 +46,6 @@ class ShoppingCart {
         carts.splice(carts.findIndex(cart=>cart.username == userCart.username), 1, userCart);
         return userCart.items;
     }
+    static remo
 }
 module.exports = ShoppingCart

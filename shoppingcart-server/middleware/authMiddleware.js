@@ -2,7 +2,7 @@ const User = require("../models/users");
 
 const middleware = (router) => {
   router.use((req, res, next) => {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.get("Authorization");
     if (!authHeader) {
       return res.status(401).json({ error: "Authorization header missing", status: 401 });
     }
